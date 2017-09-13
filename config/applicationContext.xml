@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+      	http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+        http://code.alibabatech.com/schema/dubbo          
+	    http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+	    http://www.springframework.org/schema/mvc 
+	    http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+        ">
+      
+	
+    <!-- 自动扫描 -->
+	<context:component-scan base-package="com.ssm"/>
+	<mvc:annotation-driven>
+		 <mvc:message-converters>  
+            <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">  
+                <property name="objectMapper" ref="customObjectMapper"></property>  
+            </bean>  
+        </mvc:message-converters>   
+	</mvc:annotation-driven>
+	<!-- json格式转换器 -->
+	<bean id="customObjectMapper" class="com.ssm.common.converter.CustomObjectMapper"></bean> 
+	
+	
+	<!--加载资源文件 -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:datasource.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 配置DataSource数据源 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="maxActive" value="${jdbc.maxActive}" />
+		<property name="maxIdle" value="${jdbc.maxIdle}" />
+		<property name="maxWait" value="${jdbc.maxWait}" />
+		<property name="defaultAutoCommit" value="${jdbc.defaultAutoCommit}" />
+		<property name="removeAbandoned" value="${jdbc.removeAbandoned}" />
+		<property name="removeAbandonedTimeout" value="${jdbc.removeAbandonedTimeout}" />
+	</bean>
+
+	<!-- 配置事务管理器 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- 定义个通知，指定事务管理器 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+    		<tx:method name="save*" propagation="REQUIRED" rollback-for="Exception"/>
+    		<tx:method name="del*" propagation="REQUIRED" rollback-for="Exception"/>
+    		<tx:method name="update*" propagation="REQUIRED" rollback-for="Exception"/>
+    		<tx:method name="merge*" propagation="REQUIRED" rollback-for="Exception"/>
+    	 	<tx:method name="get*" propagation="SUPPORTS" read-only="true" />  
+    	 	<tx:method name="find*" propagation="SUPPORTS" read-only="true" />  
+			<tx:method name="select*" propagation="SUPPORTS" read-only="true"/>
+			<tx:method name="search*" propagation="SUPPORTS" read-only="true"/>
+    	 	<tx:method name="load*" propagation="SUPPORTS" read-only="true"/>
+    	</tx:attributes>
+	</tx:advice>
+	
+	<!--配置一个切入点-->
+	<aop:config>
+    	<aop:pointcut id="servicePointcut"   expression="execution(* com.ssm.*.service.*.*(..))"/> 
+    	<aop:advisor advice-ref="txAdvice" pointcut-ref="servicePointcut"/>
+    </aop:config>
+
+	<!--配置sqlSessionFactory-->  
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="mapperLocations" value="classpath*:com/ssm/**/mapper/*Mapper.xml" />
+	</bean>
+
+	<!-- 通过扫描器的方式自动装配mapper -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.ssm.*.dao" />
+	</bean>
+	
+</beans>
