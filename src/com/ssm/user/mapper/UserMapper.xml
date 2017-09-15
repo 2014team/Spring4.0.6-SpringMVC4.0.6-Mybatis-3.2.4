@@ -4,13 +4,46 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssm.user.dao.UserDao">
 
-	<select id="select" parameterType="Map" resultType="com.ssm.user.entity.User">
+	<resultMap type="com.ssm.user.entity.User" id="user">
+		<result column="name" property="name"/>
+		<result column="password" property="password"/>
+		<result column="come_from" property="comeFrom"/>
+		<result column="create_date" property="createDate"/>
+		<result column="update_date" property="updateDate"/>
+	</resultMap>
+
+
+	<!--查询 -->
+	<select id="select" parameterType="Map" resultMap="user">
 		 SELECT * FROM users
 	</select>
 	
+	<!--保存 -->
 	<insert id="insert" parameterType="com.ssm.user.entity.User" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO USERS (name,passWord,comeFrom,createDate,updateDate)
-	    values(#{name},#{passWord},#{comeFrom},NOW(),NOW())
+		INSERT INTO USERS (name,password,come_from,create_date,update_date)
+	    values(#{name},#{password},#{comeFrom},NOW(),NOW())
 	</insert>
+	
+	<!--修改 -->
+	<update id="update" parameterType="com.ssm.user.entity.User">
+		UPDATE USERS 
+		 <trim prefix="SET" suffixOverrides=",">     
+			<if test="null != name">
+				name = #{name},
+			</if>
+			<if test="null != password">
+				password = #{password},
+			</if>
+			<if test="null != comeFrom">
+				come_from = #{comeFrom},
+			</if>
+		</trim>
+		where id = #{id}
+	</update>
+	
+	<!-- 删除  -->
+	<delete id="delete" parameterType="Integer">
+		DELETE FROM USERS WHERE id = #{id}
+	</delete>
 	
 </mapper>

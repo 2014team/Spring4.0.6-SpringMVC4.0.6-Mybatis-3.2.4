@@ -8,7 +8,7 @@ public class User extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 	private String name;
-	private String passWord;
+	private String password;
 	private String comeFrom;
 	private Date createDate;
 	private Date updateDate;
@@ -21,12 +21,12 @@ public class User extends BaseEntity {
 		this.name = name;
 	}
 
-	public String getPassWord() {
-		return passWord;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setPassWord(String passWord) {
-		this.passWord = passWord;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getComeFrom() {
