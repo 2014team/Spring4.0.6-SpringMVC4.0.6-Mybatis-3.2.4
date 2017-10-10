@@ -1,8 +1,8 @@
-package com.ssm.base.entity;
+package com.ssm.base.domain;
 
 import java.io.Serializable;
 
-public class BaseEntity implements Serializable{
+public class BaseDO implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	public Integer id;

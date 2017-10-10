@@ -11,7 +11,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializerProvider;  
 import org.codehaus.jackson.map.ser.CustomSerializerFactory;  
 
-import com.ssm.common.contant.DateContant;
+import com.ssm.common.constant.DateConstant;
   
  
 /**
@@ -28,7 +28,7 @@ public class CustomObjectMapper extends ObjectMapper {
                     JsonGenerator jsonGenerator,   
                     SerializerProvider provider)  
                     throws IOException, JsonProcessingException {  
-                SimpleDateFormat sdf = new SimpleDateFormat(DateContant.YYYY_MM_DD_HH_MM_SS);  
+                SimpleDateFormat sdf = new SimpleDateFormat(DateConstant.YYYY_MM_DD_HH_MM_SS);  
                 jsonGenerator.writeString(sdf.format(value));  
             }  
         });  

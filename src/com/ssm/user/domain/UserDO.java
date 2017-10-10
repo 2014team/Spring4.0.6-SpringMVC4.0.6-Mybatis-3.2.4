@@ -1,10 +1,10 @@
-package com.ssm.user.entity;
+package com.ssm.user.domain;
 
 import java.util.Date;
 
-import com.ssm.base.entity.BaseEntity;
+import com.ssm.base.domain.BaseDO;
 
-public class User extends BaseEntity {
+public class UserDO extends BaseDO {
 
 	private static final long serialVersionUID = 1L;
 	private String name;

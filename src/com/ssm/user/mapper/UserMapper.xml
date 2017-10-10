@@ -4,7 +4,7 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssm.user.dao.UserDao">
 
-	<resultMap type="com.ssm.user.entity.User" id="user">
+	<resultMap type="UserDO" id="user">
 		<result column="name" property="name"/>
 		<result column="password" property="password"/>
 		<result column="come_from" property="comeFrom"/>
@@ -19,13 +19,13 @@
 	</select>
 	
 	<!--保存 -->
-	<insert id="insert" parameterType="com.ssm.user.entity.User" useGeneratedKeys="true" keyProperty="id">
+	<insert id="save" parameterType="UserDO" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO USERS (name,password,come_from,create_date,update_date)
 	    values(#{name},#{password},#{comeFrom},NOW(),NOW())
 	</insert>
 	
 	<!--修改 -->
-	<update id="update" parameterType="com.ssm.user.entity.User">
+	<update id="update" parameterType="UserDO">
 		UPDATE USERS 
 		 <trim prefix="SET" suffixOverrides=",">     
 			<if test="null != name">

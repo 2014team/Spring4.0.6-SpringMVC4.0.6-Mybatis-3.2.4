@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ssm.common.JsonResult;
-import com.ssm.user.entity.User;
+import com.ssm.user.domain.UserDO;
+import com.ssm.user.dto.UserDTO;
 import com.ssm.user.service.UserService;
 import com.ssm.user.vo.UserVO;
 
@@ -22,13 +23,21 @@ public class UserController {
 	
 	@RequestMapping("/save")
 	@ResponseBody
-	public JsonResult save(UserVO userVO){
+	public JsonResult save(UserDTO UserDTO){
 		JsonResult result = new JsonResult();
-		User user = new User();
-		BeanUtils.copyProperties(userVO, user);
-		userService.save(user);
-		if(user.getId()>0){
-			result.success();
+		UserDO userDO = new UserDO();
+		BeanUtils.copyProperties(UserDTO, userDO);
+		try {
+			//userService.save(tuserDO);
+			//为了测试事物
+			userService.saveUser(userDO);
+			if(userDO.getId()>0){
+				result.success();
+				return result;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.failure();
 			return result;
 		}
 		result.failure();
@@ -52,7 +61,7 @@ public class UserController {
 	@ResponseBody
 	public JsonResult update(UserVO userVO){
 		JsonResult result = new JsonResult();
-		User user = new User();
+		UserDO user = new UserDO();
 		BeanUtils.copyProperties(userVO, user);
 		int index = userService.update(user);
 		if(index>0){
@@ -67,7 +76,7 @@ public class UserController {
 	@ResponseBody
 	public JsonResult select(){
 		JsonResult result = new JsonResult();
-		List<User> userList = userService.select(null);
+		List<UserDO> userList = userService.select(null);
 		result.success(userList);
 		return result;
 	}

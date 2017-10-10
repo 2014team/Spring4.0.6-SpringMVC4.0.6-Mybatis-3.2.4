@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-import com.ssm.base.entity.BaseEntity;
+import com.ssm.base.domain.BaseDO;
 
 
 /**
@@ -14,12 +14,12 @@ import com.ssm.base.entity.BaseEntity;
  * @param <PK>    主键类，必须实现Serializable接口
  * 
  */
-public abstract interface BaseDao<T extends BaseEntity, PK extends Serializable> {
+public abstract interface BaseDao<T extends BaseDO, PK extends Serializable> {
     /**
      * 插入一个实体（在数据库INSERT一条记录）
      * @param entity 实体对象
      */
-    public abstract int insert(T entity);
+    public abstract int save(T entity);
     
     /**
      * 修改一个实体对象（UPDATE一条记录）

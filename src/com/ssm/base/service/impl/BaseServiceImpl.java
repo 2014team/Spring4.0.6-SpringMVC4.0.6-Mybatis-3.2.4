@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssm.base.dao.BaseDao;
-import com.ssm.base.entity.BaseEntity;
+import com.ssm.base.domain.BaseDO;
 import com.ssm.base.service.BaseService;
 
 
-public abstract class BaseServiceImpl<T extends BaseEntity, PK extends Serializable> implements BaseService<T , PK > {
+public abstract class BaseServiceImpl<T extends BaseDO, PK extends Serializable> implements BaseService<T , PK > {
 	
 //    @SuppressWarnings("unchecked")
 //    private Class<T> getTClass() {
@@ -33,7 +33,7 @@ public abstract class BaseServiceImpl<T extends BaseEntity, PK extends Serializa
             return 0;
         }
 
-        return this.dao.insert(t);
+        return this.dao.save(t);
     }
 
     public int saveOrUpdate(T t) {

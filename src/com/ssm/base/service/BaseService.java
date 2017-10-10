@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-import com.ssm.base.entity.BaseEntity;
+import com.ssm.base.domain.BaseDO;
 
 
-public abstract interface BaseService<T extends BaseEntity, PK extends Serializable> {
+public abstract interface BaseService<T extends BaseDO, PK extends Serializable> {
 
 	/**
 	 * 保存数据
