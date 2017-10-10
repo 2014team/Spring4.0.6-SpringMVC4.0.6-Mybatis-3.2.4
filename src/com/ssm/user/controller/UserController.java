@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ssm.common.JsonResult;
 import com.ssm.user.domain.UserDO;
-import com.ssm.user.dto.UserDTO;
 import com.ssm.user.service.UserService;
 import com.ssm.user.vo.UserVO;
 
@@ -23,10 +22,10 @@ public class UserController {
 	
 	@RequestMapping("/save")
 	@ResponseBody
-	public JsonResult save(UserDTO UserDTO){
+	public JsonResult save(UserVO userVO){
 		JsonResult result = new JsonResult();
 		UserDO userDO = new UserDO();
-		BeanUtils.copyProperties(UserDTO, userDO);
+		BeanUtils.copyProperties(userVO, userDO);
 		try {
 			//userService.save(tuserDO);
 			//为了测试事物
