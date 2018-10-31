@@ -14,19 +14,17 @@
            http://www.springframework.org/schema/tx
            http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
 	
-	
-    <!-- 自动将Service层注入--> 
-	<context:component-scan base-package="com.ssm.*.service" />
     
 	<!--加载资源文件 -->
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<value>classpath:jdbc.properties</value>
+				<value>classpath*:jdbc.properties</value>
 			</list>
 		</property>
 	</bean>
+	
 
 	<!-- 配置DataSource数据源 -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
@@ -84,6 +82,10 @@
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="com.ssm.*.dao" />
 	</bean>
+	
+	<!-- 扫面包配置 -->
+	<context:component-scan base-package="com.ssm"/>
+	
 	
 	<!-- 文件上传 -->
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
